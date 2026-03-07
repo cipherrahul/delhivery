@@ -31,7 +31,18 @@ class AuthState {
 
 class AuthNotifier extends AutoDisposeNotifier<AuthState> {
   @override
-  AuthState build() => AuthState();
+  AuthState build() {
+    // In a real app, you would check secure storage here
+    return AuthState();
+  }
+
+  void updateToken(String? token) {
+    if (token != null) {
+      apiClient.dio.options.headers['Authorization'] = 'Bearer $token';
+    } else {
+      apiClient.dio.options.headers.remove('Authorization');
+    }
+  }
 
   Future<void> login(String email, String password) async {
     state = state.copyWith(isLoading: true);
@@ -42,12 +53,19 @@ class AuthNotifier extends AutoDisposeNotifier<AuthState> {
       });
 
       final data = response.data;
+      final token = data['token'];
+      
+      updateToken(token);
+      
       state = state.copyWith(
         isLoading: false,
         isAuthenticated: true,
         role: data['user']['role'],
-        token: data['token'],
+        token: token,
       );
+
+      // Save to secure storage here:
+      // await storage.write(key: 'jwt_token', value: token);
     } catch (e) {
       state = state.copyWith(isLoading: false);
       rethrow;
@@ -55,6 +73,7 @@ class AuthNotifier extends AutoDisposeNotifier<AuthState> {
   }
 
   void logout() {
+    updateToken(null);
     state = AuthState();
   }
 }

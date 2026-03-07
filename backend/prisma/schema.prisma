@@ -49,6 +49,7 @@ model Seller {
   user        User      @relation(fields: [userId], references: [id])
   storeName   String
   description String?
+  isVerified  Boolean   @default(false)
   products    Product[]
   createdAt   DateTime  @default(now())
 }

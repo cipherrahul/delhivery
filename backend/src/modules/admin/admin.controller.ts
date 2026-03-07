@@ -58,4 +58,41 @@ router.get('/users', authMiddleware, roleGuard(['ADMIN']), async (req, res) => {
   }
 });
 
+// Admin: List all shipments
+router.get('/shipments', authMiddleware, roleGuard(['ADMIN']), async (req, res) => {
+  try {
+    const shipments = await prisma.shipment.findMany({
+      include: { order: true, driver: true }
+    });
+    res.json(shipments);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching shipments' });
+  }
+});
+
+// Admin: List all products (raw list)
+router.get('/products', authMiddleware, roleGuard(['ADMIN']), async (req, res) => {
+  try {
+    const products = await prisma.product.findMany({
+      include: { seller: true }
+    });
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching products' });
+  }
+});
+
+// Admin: Verify a seller
+router.patch('/sellers/:id/verify', authMiddleware, roleGuard(['ADMIN']), async (req, res) => {
+  try {
+    const seller = await prisma.seller.update({
+      where: { id: req.params.id as string },
+      data: { isVerified: true }
+    });
+    res.json({ message: 'Seller verified successfully', seller });
+  } catch (error) {
+    res.status(500).json({ message: 'Error verifying seller' });
+  }
+});
+
 export default router;

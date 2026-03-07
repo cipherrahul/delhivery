@@ -13,11 +13,43 @@ router.get('/profile', authMiddleware, async (req: AuthRequest, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      include: { addresses: true }
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        phone: true,
+        role: true,
+        createdAt: true,
+        addresses: true
+      }
     });
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching profile' });
+  }
+});
+
+// Update profile
+router.patch('/profile', authMiddleware, async (req: AuthRequest, res) => {
+  const userId = req.user?.id;
+  if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+  
+  const { name, phone } = req.body;
+  try {
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { name, phone },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        phone: true,
+        role: true
+      }
+    });
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating profile' });
   }
 });
 
@@ -35,6 +67,21 @@ router.post('/address', authMiddleware, async (req: AuthRequest, res) => {
     res.status(201).json(address);
   } catch (error) {
     res.status(500).json({ message: 'Error saving address' });
+  }
+});
+
+// Delete address
+router.delete('/address/:id', authMiddleware, async (req: AuthRequest, res) => {
+  const userId = req.user?.id;
+  if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+
+  try {
+    await prisma.address.delete({
+      where: { id: req.params.id as string, userId }
+    });
+    res.json({ message: 'Address deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting address' });
   }
 });
 

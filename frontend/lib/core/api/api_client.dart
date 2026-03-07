@@ -5,8 +5,13 @@ class ApiClient {
   late Dio dio;
   final logger = Logger();
 
-  // Using localhost for now, but in real devices you'd use your IP
-  static const String baseUrl = 'http://localhost:3000/api';
+  // Use 10.0.2.2 for Android emulators to access localhost on host machine
+  static String baseUrl = 'http://10.0.2.2:3000/api';
+
+  static void setBaseUrl(String url) {
+    baseUrl = url;
+    apiClient.dio.options.baseUrl = url;
+  }
 
   ApiClient() {
     dio = Dio(BaseOptions(

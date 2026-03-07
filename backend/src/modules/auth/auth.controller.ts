@@ -46,6 +46,14 @@ router.post('/signup', authLimiter, async (req, res) => {
         ...data,
         phone: data.phone ?? null,
         password: hashedPassword,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        phone: true,
+        role: true,
+        createdAt: true
       }
     });
 
@@ -83,7 +91,8 @@ router.post('/login', authLimiter, async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    res.json({ user, token });
+    const { password: _, ...userWithoutPassword } = user;
+    res.json({ user: userWithoutPassword, token });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ errors: error.issues });

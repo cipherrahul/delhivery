@@ -23,7 +23,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
   }
 
   void _initSocket() {
-    socket = IO.io('http://localhost:5000/tracking', <String, dynamic>{
+    socket = IO.io('http://10.0.2.2:3000/tracking', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
