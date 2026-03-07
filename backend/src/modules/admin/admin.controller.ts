@@ -36,11 +36,13 @@ router.get('/users', authMiddleware, roleGuard(['ADMIN']), async (req, res) => {
   try {
     const users = await prisma.user.findMany({
       where: {
-        OR: query ? [
-          { name: { contains: String(query), mode: 'insensitive' } },
-          { email: { contains: String(query), mode: 'insensitive' } }
-        ] : undefined,
-        role: role ? (role as any) : undefined
+        ...(query && {
+          OR: [
+            { name: { contains: String(query), mode: 'insensitive' } },
+            { email: { contains: String(query), mode: 'insensitive' } }
+          ]
+        }),
+        ...(role && { role: role as any })
       },
       select: {
         id: true,

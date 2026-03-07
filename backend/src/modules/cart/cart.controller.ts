@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { authMiddleware, AuthRequest } from '../../shared/middlewares/auth.middleware.js';
+import { authMiddleware, type AuthRequest } from '../../shared/middlewares/auth.middleware.js';
 import { z } from 'zod';
 
 const router = Router();
@@ -14,6 +14,7 @@ const cartSchema = z.object({
 // Get cart items
 router.get('/', authMiddleware, async (req: AuthRequest, res) => {
   const userId = req.user?.id;
+  if (!userId) return res.status(401).json({ message: 'Unauthorized' });
   try {
     const cart = await prisma.cartItem.findMany({
       where: { userId },
@@ -28,6 +29,7 @@ router.get('/', authMiddleware, async (req: AuthRequest, res) => {
 // Add to cart
 router.post('/', authMiddleware, async (req: AuthRequest, res) => {
   const userId = req.user?.id;
+  if (!userId) return res.status(401).json({ message: 'Unauthorized' });
   try {
     const { productId, quantity } = cartSchema.parse(req.body);
     const cartItem = await prisma.cartItem.upsert({

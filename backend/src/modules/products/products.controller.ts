@@ -13,7 +13,7 @@ const productSchema = z.object({
   stock: z.number().int().nonnegative(),
   category: z.string(),
   sellerId: z.string().uuid(),
-  images: z.array(z.string().url()).optional(),
+  images: z.array(z.string().url()).default([]),
 });
 
 // Get all products with pagination

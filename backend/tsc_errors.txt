@@ -1,0 +1,14 @@
+src/modules/admin/admin.controller.ts(38,7): error TS2375: Type '{ OR: ({ name: { contains: string; mode: "insensitive"; }; } | { email: { contains: string; mode: "insensitive"; }; })[] | undefined; role: any; }' is not assignable to type 'UserWhereInput' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'OR' are incompatible.
+    Type '({ name: { contains: string; mode: "insensitive"; }; } | { email: { contains: string; mode: "insensitive"; }; })[] | undefined' is not assignable to type 'UserWhereInput[]'.
+      Type 'undefined' is not assignable to type 'UserWhereInput[]'.
+src/modules/cart/cart.controller.ts(19,7): error TS2375: Type '{ userId: string | undefined; }' is not assignable to type 'CartItemWhereInput' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'userId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string | StringFilter<"CartItem">'.
+      Type 'undefined' is not assignable to type 'string | StringFilter<"CartItem">'.
+src/modules/products/products.controller.ts(69,7): error TS2375: Type '{ name: string; description: string; price: number; stock: number; category: string; sellerId: string; images?: string[] | undefined; }' is not assignable to type '(Without<ProductCreateInput, ProductUncheckedCreateInput> & ProductUncheckedCreateInput) | (Without<...> & ProductCreateInput)' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Type '{ name: string; description: string; price: number; stock: number; category: string; sellerId: string; images?: string[] | undefined; }' is not assignable to type 'Without<ProductCreateInput, ProductUncheckedCreateInput> & ProductUncheckedCreateInput' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+    Type '{ name: string; description: string; price: number; stock: number; category: string; sellerId: string; images?: string[] | undefined; }' is not assignable to type 'ProductUncheckedCreateInput' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+      Types of property 'images' are incompatible.
+        Type 'string[] | undefined' is not assignable to type 'string[] | ProductCreateimagesInput'.
+          Type 'undefined' is not assignable to type 'string[] | ProductCreateimagesInput'.
