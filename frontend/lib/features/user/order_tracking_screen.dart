@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/theme/design_system.dart';
 
@@ -12,7 +12,7 @@ class OrderTrackingScreen extends StatefulWidget {
 }
 
 class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
-  late IO.Socket socket;
+  late io.Socket socket;
   String currentStatus = 'Out for Delivery';
   String currentLocation = 'New Delhi Hub';
 
@@ -23,13 +23,13 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
   }
 
   void _initSocket() {
-    socket = IO.io('http://10.0.2.2:3000/tracking', <String, dynamic>{
+    socket = io.io('http://10.0.2.2:3000/tracking', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
     socket.connect();
     
-    socket.onConnect((_) => print('Connected to tracking'));
+    socket.onConnect((_) => debugPrint('Connected to tracking'));
     
     socket.on('locationUpdate:${widget.orderId}', (data) {
       setState(() {
@@ -179,7 +179,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(item['status'] as String, style: DesignSystem.bodyLarge.copyWith(
-                      color: item['active'] as bool ? DesignSystem.primary : DesignSystem.primary.withOpacity(0.4),
+                      color: item['active'] as bool ? DesignSystem.primary : DesignSystem.primary.withValues(alpha: 0.4),
                     )),
                     Text(item['time'] as String, style: DesignSystem.bodyMedium),
                   ],

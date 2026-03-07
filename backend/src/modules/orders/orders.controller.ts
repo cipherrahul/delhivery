@@ -1,11 +1,10 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../shared/database/prisma.js';
 import { authMiddleware } from '../../shared/middlewares/auth.middleware.js';
 import { z } from 'zod';
 import type { AuthRequest } from '../../shared/middlewares/auth.middleware.js';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 const orderSchema = z.object({
   items: z.array(z.object({
@@ -92,7 +91,7 @@ router.post('/:id/cancel', authMiddleware, async (req: AuthRequest, res) => {
   try {
     const result = await prisma.$transaction(async (tx: any) => {
       const order = await tx.order.findUnique({
-        where: { id: req.params.id },
+        where: { id: req.params.id as string },
         include: { items: true }
       });
 
@@ -109,7 +108,7 @@ router.post('/:id/cancel', authMiddleware, async (req: AuthRequest, res) => {
 
       // 2. Update order status
       const updatedOrder = await tx.order.update({
-        where: { id: req.params.id },
+        where: { id: req.params.id as string },
         data: { status: 'CANCELLED' }
       });
 

@@ -1,0 +1,16 @@
+Analyzing frontend...                                           
+
+  error - Classes can only extend other classes - lib\features\auth\auth_provider.dart:32:28 - extends_non_class
+  error - Too many positional arguments: 0 expected, but 1 found - lib\features\auth\auth_provider.dart:33:26 - extra_positional_arguments
+  error - Undefined name 'state' - lib\features\auth\auth_provider.dart:44:5 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\auth_provider.dart:44:13 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\auth_provider.dart:56:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\auth_provider.dart:56:15 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\auth_provider.dart:66:7 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\auth_provider.dart:66:15 - undefined_identifier
+  error - Undefined name 'state' - lib\features\auth\auth_provider.dart:73:5 - undefined_identifier
+  error - Undefined name 'StateNotifierProvider' - lib\features\auth\auth_provider.dart:77:22 - undefined_identifier
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\seller\shipment_update_screen.dart:36:15 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\seller\shipment_update_screen.dart:37:15 - deprecated_member_use
+   info - The import of 'package:flutter/foundation.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' - lib\features\user\order_tracking_screen.dart:3:8 - unnecessary_import
+

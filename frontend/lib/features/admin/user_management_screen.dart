@@ -73,7 +73,7 @@ class UserManagementScreen extends StatelessWidget {
             leading: CircleAvatar(
               radius: 24,
               backgroundColor: DesignSystem.secondary,
-              child: Text('U${index}', style: const TextStyle(fontWeight: FontWeight.bold)),
+              child: Text('U$index', style: const TextStyle(fontWeight: FontWeight.bold)),
             ),
             title: Text('User Profile $index', style: DesignSystem.h2.copyWith(fontSize: 16)),
             subtitle: Text('user$index@example.com', style: DesignSystem.bodyMedium),

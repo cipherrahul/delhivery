@@ -4,6 +4,8 @@ import '../../core/theme/design_system.dart';
 import '../../shared/widgets/app_button.dart';
 import 'signup_screen.dart';
 import '../user/home_screen.dart';
+import '../seller/seller_dashboard.dart';
+import '../admin/admin_dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

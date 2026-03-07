@@ -1,10 +1,9 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../shared/database/prisma.js';
 import { authMiddleware } from '../../shared/middlewares/auth.middleware.js';
 import type { AuthRequest } from '../../shared/middlewares/auth.middleware.js';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 // Get user profile
 router.get('/profile', authMiddleware, async (req: AuthRequest, res) => {

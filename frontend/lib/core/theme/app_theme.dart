@@ -10,7 +10,6 @@ class AppTheme {
         primary: AppColors.primary,
         secondary: AppColors.secondary,
         surface: AppColors.surface,
-        background: AppColors.background,
         error: AppColors.error,
         onPrimary: Colors.white,
         onSecondary: AppColors.primary,
@@ -27,7 +26,7 @@ class AppTheme {
         ),
         iconTheme: IconThemeData(color: AppColors.textPrimary),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -78,7 +77,6 @@ class AppTheme {
         primary: AppColors.secondary,
         onPrimary: AppColors.primary,
         surface: const Color(0xFF1E1E1E),
-        background: const Color(0xFF121212),
       ),
       scaffoldBackgroundColor: const Color(0xFF121212),
       // Add more dark theme customizations here

@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
 import { authMiddleware, roleGuard } from '../../shared/middlewares/auth.middleware.js';
+import prisma from '../../shared/database/prisma.js';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 // Get global platform metrics (Admin only)
 router.get('/metrics', authMiddleware, roleGuard(['ADMIN']), async (req, res) => {

@@ -1,11 +1,10 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../shared/database/prisma.js';
 import { authMiddleware, roleGuard } from '../../shared/middlewares/auth.middleware.js';
 import type { AuthRequest } from '../../shared/middlewares/auth.middleware.js';
 import { z } from 'zod';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 const productSchema = z.object({
   name: z.string().min(3),

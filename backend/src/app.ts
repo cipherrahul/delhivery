@@ -26,6 +26,10 @@ app.use(express.json());
 app.use('/api/', apiLimiter);
 
 // Routes
+app.get('/', (req, res) => {
+  res.send('<h1>Welcome to Delhivery API Server! 🚀</h1><p>The backend is running successfully. API endpoints are available under <code>/api/...</code></p>');
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });

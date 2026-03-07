@@ -1,0 +1,5 @@
+Analyzing frontend...                                           
+
+warning - The diagnostic 'deprecated_member_use' doesn't need to be ignored here because it's already being ignored - lib\features\seller\shipment_update_screen.dart:33:27 - duplicate_ignore
+
+1 issue found. (ran in 24.4s)

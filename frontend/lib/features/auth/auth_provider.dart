@@ -29,7 +29,7 @@ class AuthState {
   }
 }
 
-class AuthNotifier extends AutoDisposeNotifier<AuthState> {
+class AuthNotifier extends Notifier<AuthState> {
   @override
   AuthState build() {
     // In a real app, you would check secure storage here
@@ -78,6 +78,6 @@ class AuthNotifier extends AutoDisposeNotifier<AuthState> {
   }
 }
 
-final authProvider = NotifierProvider.autoDispose<AuthNotifier, AuthState>(() {
+final authProvider = NotifierProvider<AuthNotifier, AuthState>(() {
   return AuthNotifier();
 });

@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../shared/widgets/app_button.dart';
@@ -28,7 +29,8 @@ class _ShipmentUpdateScreenState extends State<ShipmentUpdateScreen> {
             const SizedBox(height: 32),
             const Text('Update Status', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             const SizedBox(height: 16),
-            ..._statuses.map((status) => RadioListTile(
+            ..._statuses.map((status) => 
+               RadioListTile(
               title: Text(status.replaceAll('_', ' ')),
               value: status,
               groupValue: _currentStatus,

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../shared/database/prisma.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { z } from 'zod';
@@ -7,7 +7,6 @@ import { authLimiter } from '../../shared/middlewares/rate-limit.middleware.js';
 import { authMiddleware } from '../../shared/middlewares/auth.middleware.js';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 const signupSchema = z.object({
   email: z.string().email(),

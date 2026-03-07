@@ -43,7 +43,7 @@ class CartScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.shopping_bag_outlined, size: 80, color: DesignSystem.primary.withOpacity(0.1)),
+            Icon(Icons.shopping_bag_outlined, size: 80, color: DesignSystem.primary.withValues(alpha: 0.1)),
             const SizedBox(height: 16),
             Text('Your bag is empty', style: DesignSystem.bodyLarge),
           ],
@@ -142,7 +142,7 @@ class CartScreen extends ConsumerWidget {
               backgroundColor: DesignSystem.accent,
               foregroundColor: DesignSystem.primary,
               minimumSize: const Size(double.infinity, 64),
-              shape: RoundedRectangle.circular(20),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               elevation: 0,
             ),
             child: const Text('Checkout Now', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),

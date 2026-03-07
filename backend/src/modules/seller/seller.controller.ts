@@ -1,10 +1,9 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
 import { authMiddleware, roleGuard } from '../../shared/middlewares/auth.middleware.js';
 import type { AuthRequest } from '../../shared/middlewares/auth.middleware.js';
+import prisma from '../../shared/database/prisma.js';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 // Get seller profile & dashboard stats
 router.get('/dashboard', authMiddleware, roleGuard(['SELLER']), async (req: AuthRequest, res) => {

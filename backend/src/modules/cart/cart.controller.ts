@@ -1,10 +1,9 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
 import { authMiddleware, type AuthRequest } from '../../shared/middlewares/auth.middleware.js';
+import prisma from '../../shared/database/prisma.js';
 import { z } from 'zod';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 const cartSchema = z.object({
   productId: z.string().uuid(),

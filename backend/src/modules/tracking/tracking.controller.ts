@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { PrismaClient, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { io } from '../../app.js';
 import { authMiddleware, roleGuard } from '../../shared/middlewares/auth.middleware.js';
+import prisma from '../../shared/database/prisma.js';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 // Update driver location (Real-time)
 router.post('/location', async (req, res) => {

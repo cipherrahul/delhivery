@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../shared/database/prisma.js';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 // Create payment
 router.post('/', async (req, res) => {
