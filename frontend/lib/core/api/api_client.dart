@@ -48,6 +48,10 @@ class ApiClient {
   Future<Response> post(String path, {dynamic data, Options? options}) async {
     return await dio.post(path, data: data, options: options);
   }
+
+  Future<Response> patch(String path, {dynamic data, Options? options}) async {
+    return await dio.patch(path, data: data, options: options);
+  }
 }
 
 // Global instance (can be replaced by Riverpod provider later)

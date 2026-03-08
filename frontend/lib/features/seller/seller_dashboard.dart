@@ -6,6 +6,18 @@ import 'add_product_screen.dart';
 class SellerDashboard extends StatelessWidget {
   const SellerDashboard({super.key});
 
+  void _showComingSoon(BuildContext context, String feature) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$feature coming soon!', style: const TextStyle(color: Colors.white)),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: DesignSystem.primary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,11 +29,11 @@ class SellerDashboard extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined, color: DesignSystem.primary),
-            onPressed: () {},
+            onPressed: () => _showComingSoon(context, 'Notifications'),
           ),
           IconButton(
             icon: const Icon(Icons.settings_outlined, color: DesignSystem.primary),
-            onPressed: () {},
+            onPressed: () => _showComingSoon(context, 'Settings'),
           ),
         ],
       ),

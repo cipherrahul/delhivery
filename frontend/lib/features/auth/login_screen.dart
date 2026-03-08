@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/theme/design_system.dart';
 import '../../shared/widgets/app_button.dart';
@@ -6,21 +7,24 @@ import 'signup_screen.dart';
 import '../user/home_screen.dart';
 import '../seller/seller_dashboard.dart';
 import '../admin/admin_dashboard.dart';
+import 'auth_provider.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+
     return Scaffold(
       backgroundColor: DesignSystem.background,
       body: SafeArea(
@@ -90,11 +94,43 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 40),
               AppButton(
                 text: 'Sign In',
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  );
+                isLoading: authState.isLoading,
+                onPressed: () async {
+                  if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please enter both email and password')),
+                    );
+                    return;
+                  }
+                  try {
+                    await ref.read(authProvider.notifier).login(
+                      _emailController.text.trim(),
+                      _passwordController.text,
+                    );
+                    if (!mounted) return;
+                    
+                    final targetRole = ref.read(authProvider).role;
+                    Widget targetScreen = const HomeScreen();
+                    
+                    if (targetRole == 'SELLER') targetScreen = const SellerDashboard();
+                    if (targetRole == 'ADMIN') targetScreen = const AdminDashboard();
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => targetScreen),
+                    );
+                  } catch (e) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('Invalid credentials or network error.', style: TextStyle(color: Colors.white)),
+                          backgroundColor: Colors.redAccent,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        ),
+                      );
+                    }
+                  }
                 },
               ),
               const SizedBox(height: 32),

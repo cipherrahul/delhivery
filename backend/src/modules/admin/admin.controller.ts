@@ -81,6 +81,23 @@ router.get('/products', authMiddleware, roleGuard(['ADMIN']), async (req, res) =
   }
 });
 
+// Admin: List pending seller verification requests
+router.get('/sellers/pending', authMiddleware, roleGuard(['ADMIN']), async (req, res) => {
+  try {
+    const pendingSellers = await prisma.seller.findMany({
+      where: { isVerified: false },
+      include: {
+        user: {
+          select: { name: true, email: true, phone: true }
+        }
+      }
+    });
+    res.json(pendingSellers);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching pending sellers' });
+  }
+});
+
 // Admin: Verify a seller
 router.patch('/sellers/:id/verify', authMiddleware, roleGuard(['ADMIN']), async (req, res) => {
   try {

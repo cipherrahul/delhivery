@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../core/theme/design_system.dart';
 import '../../core/api/api_client.dart';
+import 'checkout_screen.dart';
 
 final cartProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final response = await apiClient.get('/cart');
@@ -137,7 +138,12 @@ class CartScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CheckoutScreen(cartData: cart)),
+              );
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: DesignSystem.accent,
               foregroundColor: DesignSystem.primary,

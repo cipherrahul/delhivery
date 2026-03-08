@@ -2,9 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/theme/design_system.dart';
 import 'user_management_screen.dart';
+import 'seller_approvals_screen.dart';
 
 class AdminDashboard extends StatelessWidget {
   const AdminDashboard({super.key});
+
+  void _showComingSoon(BuildContext context, String feature) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$feature coming soon!', style: const TextStyle(color: Colors.white)),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: DesignSystem.primary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +30,7 @@ class AdminDashboard extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.admin_panel_settings_rounded, color: DesignSystem.primary),
-            onPressed: () {},
+            onPressed: () => _showComingSoon(context, 'Admin Settings'),
           ),
         ],
       ),
@@ -104,14 +117,14 @@ class AdminDashboard extends StatelessWidget {
           'Seller Approvals',
           'Review pending seller applications',
           Icons.verified_user_rounded,
-          () {},
+          () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SellerApprovalsScreen())),
         ),
         const SizedBox(height: 16),
         _buildNavLink(
           'System Logs',
           'View real-time backend events',
           Icons.terminal_rounded,
-          () {},
+          () => _showComingSoon(context, 'System Logs'),
         ),
       ],
     );

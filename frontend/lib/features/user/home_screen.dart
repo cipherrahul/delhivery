@@ -5,6 +5,9 @@ import 'package:shimmer/shimmer.dart';
 import '../../core/theme/design_system.dart';
 import '../../core/api/api_client.dart';
 import '../../shared/widgets/product_card.dart';
+import 'cart_screen.dart' as cart;
+import 'profile_screen.dart';
+import 'search_screen.dart';
 
 final productsProvider = FutureProvider<List<Product>>((ref) async {
   try {
@@ -24,7 +27,30 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  final String _selectedCategory = 'All';
+  String _selectedCategory = 'All';
+  int _currentIndex = 0;
+
+  void _showComingSoon(String feature) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$feature coming soon!', style: const TextStyle(color: Colors.white)),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: DesignSystem.primary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _onNavTapped(int index) {
+    if (index == 2) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const cart.CartScreen()));
+    } else if (index == 3) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+    } else {
+      setState(() => _currentIndex = index);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +111,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
       actions: [
-        IconButton(icon: const Icon(Icons.search_rounded, color: DesignSystem.primary), onPressed: () {}),
-        IconButton(icon: const Icon(Icons.notifications_none_rounded, color: DesignSystem.primary), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.search_rounded, color: DesignSystem.primary), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen()))),
+        IconButton(icon: const Icon(Icons.notifications_none_rounded, color: DesignSystem.primary), onPressed: () => _showComingSoon('Notifications')),
       ],
     );
   }
@@ -138,7 +164,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => _showComingSoon('Premium Collection'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: DesignSystem.accent,
                     foregroundColor: DesignSystem.primary,
@@ -170,7 +196,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: ChoiceChip(
               label: Text(categories[index]),
               selected: isSelected,
-              onSelected: (val) {},
+              onSelected: (val) {
+                if (val) setState(() => _selectedCategory = categories[index]);
+              },
               selectedColor: DesignSystem.primary,
               labelStyle: TextStyle(
                 color: isSelected ? DesignSystem.accent : DesignSystem.primary,
@@ -252,6 +280,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          onTap: _onNavTapped,
           selectedItemColor: DesignSystem.accent,
           unselectedItemColor: Colors.white.withValues(alpha: 0.5),
           showSelectedLabels: false,

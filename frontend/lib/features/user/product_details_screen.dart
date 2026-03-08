@@ -4,10 +4,20 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/theme/design_system.dart';
 import '../../shared/widgets/product_card.dart';
 
-class ProductDetailsScreen extends StatelessWidget {
+import '../../core/api/api_client.dart';
+
+class ProductDetailsScreen extends StatefulWidget {
   final Product product;
 
   const ProductDetailsScreen({super.key, required this.product});
+
+  @override
+  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
+}
+
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  bool _isFavorite = false;
+  bool _isAddingToCart = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +42,7 @@ class ProductDetailsScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          product.category.toUpperCase(),
+                          widget.product.category.toUpperCase(),
                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                         ),
                       ),
@@ -46,17 +56,17 @@ class ProductDetailsScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 24),
-                  Text(product.name, style: DesignSystem.h1),
+                  Text(widget.product.name, style: DesignSystem.h1),
                   const SizedBox(height: 16),
                   Text(
-                    '₹${product.price.toStringAsFixed(0)}',
+                    '₹${widget.product.price.toStringAsFixed(0)}',
                     style: DesignSystem.h2.copyWith(fontSize: 32, color: DesignSystem.primary),
                   ),
                   const SizedBox(height: 32),
                   Text('Description', style: DesignSystem.h2.copyWith(fontSize: 18)),
                   const SizedBox(height: 12),
                   Text(
-                    product.description,
+                    widget.product.description,
                     style: DesignSystem.bodyLarge.copyWith(
                       color: DesignSystem.primary.withValues(alpha: 0.6),
                       height: 1.6,
@@ -79,9 +89,9 @@ class ProductDetailsScreen extends StatelessWidget {
       backgroundColor: DesignSystem.secondary,
       flexibleSpace: FlexibleSpaceBar(
         background: Hero(
-          tag: 'product_${product.id}',
+          tag: 'product_${widget.product.id}',
           child: CachedNetworkImage(
-            imageUrl: product.imageUrl,
+            imageUrl: widget.product.imageUrl,
             fit: BoxFit.cover,
           ),
         ),
@@ -102,8 +112,21 @@ class ProductDetailsScreen extends StatelessWidget {
           child: CircleAvatar(
             backgroundColor: Colors.white,
             child: IconButton(
-              icon: const Icon(Icons.favorite_border_rounded, color: DesignSystem.primary),
-              onPressed: () {},
+              icon: Icon(
+                _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                color: _isFavorite ? Colors.redAccent : DesignSystem.primary,
+              ),
+              onPressed: () {
+                setState(() => _isFavorite = !_isFavorite);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(_isFavorite ? 'Saved to Favorites' : 'Removed from Favorites', style: const TextStyle(color: Colors.white)),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: DesignSystem.primary,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                );
+              },
             ),
           ),
         ),
@@ -129,7 +152,36 @@ class ProductDetailsScreen extends StatelessWidget {
           const SizedBox(width: 16),
           Expanded(
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: _isAddingToCart ? null : () async {
+                setState(() => _isAddingToCart = true);
+                try {
+                  await apiClient.post('/cart', data: {
+                    'productId': widget.product.id,
+                    'quantity': 1,
+                  });
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Added to Cart securely!', style: TextStyle(color: Colors.white)),
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: DesignSystem.success,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  );
+                } catch (e) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Failed to add to cart.', style: TextStyle(color: Colors.white)),
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Colors.redAccent,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  );
+                } finally {
+                  if (mounted) setState(() => _isAddingToCart = false);
+                }
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: DesignSystem.primary,
                 foregroundColor: DesignSystem.accent,
@@ -137,7 +189,9 @@ class ProductDetailsScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 elevation: 0,
               ),
-              child: const Text('Add to Cart', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              child: _isAddingToCart
+                  ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: DesignSystem.accent))
+                  : const Text('Add to Cart', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             ),
           ),
         ],
