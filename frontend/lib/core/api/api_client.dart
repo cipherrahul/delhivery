@@ -5,8 +5,8 @@ class ApiClient {
   late Dio dio;
   final logger = Logger();
 
-  // Use 10.0.2.2 for Android emulators to access localhost on host machine
-  static String baseUrl = 'http://10.0.2.2:3000/api';
+  // Use local Wi-Fi IP for testing on physical devices
+  static String baseUrl = 'http://10.124.13.107:3000/api';
 
   static void setBaseUrl(String url) {
     baseUrl = url;
